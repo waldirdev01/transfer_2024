@@ -24,8 +24,10 @@ class _GenerateForPaymentState extends State<GenerateForPayment> {
   List<ForPayment> forPayments = [];
   bool _cangenerate = false;
   double _contractValue = 0;
+  bool _isLoading = false;
 
   final _valorEC = TextEditingController();
+
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -43,148 +45,160 @@ class _GenerateForPaymentState extends State<GenerateForPayment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          iconTheme: const IconThemeData(color: Colors.white),
-          title: const Text('Gerar Fatura de Pagamento'),
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.calendar_today),
-              onPressed: () => _selectDate(context),
-            ),
-          ],
-        ),
-        body: Column(
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.3,
-              child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextFormField(
-                          controller: _valorEC,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20))),
-                            labelText: 'Valor',
-                          ),
-                          keyboardType: TextInputType.number,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Por favor, insira um valor';
-                            }
-                            return null;
-                          },
+      appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text('Gerar Fatura de Pagamento'),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.calendar_today),
+            onPressed: () => _selectDate(context),
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.3,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      controller: _valorEC,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                        ),
+                        labelText: 'Valor',
+                      ),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor insira um valor';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: DropdownButtonFormField<String>(
+                      value: _contract,
+                      decoration: const InputDecoration(
+                        labelText: 'Contrato',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: DropdownButtonFormField<String>(
-                          value: _contract,
-                          decoration: const InputDecoration(
-                            labelText: 'Contrato',
-                            border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20))),
-                          ),
-                          items: <String>[
-                            '20/2022',
-                            '02/2023',
-                            '63/2021',
-                          ].map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                          onChanged: (String? value) {
-                            setState(() {
-                              _contract = value!;
-                            });
-                          },
-                        ),
-                      ),
-                      _cangenerate
-                          ? Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ElevatedButton(
-                                style: AppUiConfig.elevatedButtonThemeCustom,
-                                onPressed: () {
-                                  if (_formKey.currentState!.validate()) {
-                                    _contractValue =
-                                        double.parse(_valorEC.text);
+                      items: <String>[
+                        '20/2022',
+                        '02/2023',
+                        '63/2021',
+                      ].map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (String? value) {
+                        setState(() {
+                          _contract = value!;
+                        });
+                      },
+                    ),
+                  ),
+                  _cangenerate
+                      ? Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ElevatedButton(
+                            style: AppUiConfig.elevatedButtonThemeCustom,
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                setState(() {
+                                  _isLoading = true;
+                                });
+                                _contractValue = double.parse(_valorEC.text);
 
-                                    context
-                                        .read<ForPaymentProvider>()
-                                        .generateForPaymentMonth(
-                                            monthYear: _selectedDate,
-                                            contract: _contract,
-                                            valor: _contractValue);
-                                    setState(() {
-                                      _cangenerate = false;
-                                    });
-                                  }
-                                },
-                                child: const Text(
-                                  'Gerar Quadro de Pagamento',
-                                  style: TextStyle(
-                                      fontSize: 20, color: Colors.white),
-                                ),
-                              ),
-                            )
-                          : Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ElevatedButton(
-                                style: AppUiConfig.elevatedButtonThemeCustom,
-                                onPressed: () {
-                                  context
-                                      .read<ForPaymentProvider>()
-                                      .clearForPayment();
+                                context
+                                    .read<ForPaymentProvider>()
+                                    .generateForPaymentMonth(
+                                      monthYear: _selectedDate,
+                                      contract: _contract,
+                                      valor: _contractValue,
+                                    )
+                                    .then((_) {
                                   setState(() {
-                                    _cangenerate = true;
+                                    _isLoading = false;
+                                    _cangenerate = false;
                                   });
-                                },
-                                child: const Text(
-                                  'Limpar Dados',
-                                  style: TextStyle(
-                                      fontSize: 20, color: Colors.white),
-                                ),
-                              ),
+                                });
+                              }
+                            },
+                            child: const Text(
+                              'Gerar Quadro de Pagamento',
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.white),
                             ),
-                    ],
-                  )),
-            ),
-            Flexible(
-              child: Consumer<ForPaymentProvider>(
-                builder: (context, forPaymentProvider, child) {
-                  forPaymentProvider.getForPayimentList(
-                      contract: _contract, month: _selectedDate);
-                  forPayments = forPaymentProvider.forPayments;
-                  return ListView.builder(
-                    itemCount: forPayments.length,
-                    itemBuilder: (context, index) {
-                      return ForPaymentCard(
-                        forPayment: forPaymentProvider.forPayments[index],
-                      );
-                    },
-                  );
-                },
+                          ),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ElevatedButton(
+                            style: AppUiConfig.elevatedButtonThemeCustom,
+                            onPressed: () {
+                              context
+                                  .read<ForPaymentProvider>()
+                                  .clearForPayment();
+                              setState(() {
+                                _cangenerate = true;
+                              });
+                            },
+                            child: const Text(
+                              'Limpar Dados',
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.white),
+                            ),
+                          ),
+                        ),
+                ],
               ),
             ),
-          ],
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: AppUiConfig.themeCustom.primaryColor,
-          onPressed: !_cangenerate
-              ? () => _previewPdf(
-                  _selectedDate.month, forPayments, _contract, _contractValue)
-              : null,
-          child: const Icon(Icons.print, color: Colors.white),
-        ));
+          ),
+          Flexible(
+            child: _isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : Consumer<ForPaymentProvider>(
+                    builder: (context, forPaymentProvider, child) {
+                      forPaymentProvider.getForPayimentList(
+                        contract: _contract,
+                        month: _selectedDate,
+                      );
+                      forPayments = forPaymentProvider.forPayments;
+                      return ListView.builder(
+                        itemCount: forPayments.length,
+                        itemBuilder: (context, index) {
+                          return ForPaymentCard(
+                            forPayment: forPaymentProvider.forPayments[index],
+                          );
+                        },
+                      );
+                    },
+                  ),
+          ),
+        ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppUiConfig.themeCustom.primaryColor,
+        onPressed: !_cangenerate
+            ? () => _previewPdf(
+                _selectedDate.month, forPayments, _contract, _contractValue)
+            : null,
+        child: const Icon(Icons.print, color: Colors.white),
+      ),
+    );
   }
 
   Future<void> _previewPdf(
@@ -195,18 +209,20 @@ class _GenerateForPaymentState extends State<GenerateForPayment> {
   ) async {
     Future<Uint8List> Function(PdfPageFormat) buildPdf;
 
-    buildPdf = (format) async =>
-        await ForPaymentReport.generateForPaymentReport(
-            forPayments: forPayments,
-            contract: contract,
-            contractValue: contractValue);
+    buildPdf =
+        (format) async => await ForPaymentReport.generateForPaymentReport(
+              forPayments: forPayments,
+              contract: contract,
+              contractValue: contractValue,
+            );
 
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => Scaffold(
           appBar: AppBar(
-              iconTheme: const IconThemeData(color: Colors.white),
-              title: const Text('Quadro de Pagamento Gerado.')),
+            iconTheme: const IconThemeData(color: Colors.white),
+            title: const Text('Quadro de Pagamento Gerado.'),
+          ),
           body: PdfPreview(
             build: buildPdf,
           ),

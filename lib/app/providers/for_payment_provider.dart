@@ -115,7 +115,6 @@ class ForPaymentProvider extends ChangeNotifier {
               .get();
 
           if (schoolDoc.exists) {
-            print('_schoolIds: $_schoolIds');
             School school =
                 School.fromJson(schoolDoc.data()!); // Decode JSON data once
             schoolsName.add(school.name); // Use the 'school' object
@@ -124,10 +123,8 @@ class ForPaymentProvider extends ChangeNotifier {
             }
             if (school.type == 'RURAL') {
               schoolTypeRural++;
-              print('schoolTypeRural: $schoolTypeRural');
             } else {
               schoolTypeUrban++;
-              print('schoolTypeUrban: $schoolTypeUrban');
             }
           } else {
             // Handling cases where no data is found
@@ -173,8 +170,7 @@ class ForPaymentProvider extends ChangeNotifier {
         await createForPayment(forPayment: forPayment);
       }
 
-      if (extracurricularActivities.isEmpty ||
-          extracurricularActivities == null) {
+      if (extracurricularActivities.isEmpty) {
         return;
       }
       for (var ecActivity in extracurricularActivities) {
@@ -272,7 +268,7 @@ class ForPaymentProvider extends ChangeNotifier {
 
       notifyListeners();
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 

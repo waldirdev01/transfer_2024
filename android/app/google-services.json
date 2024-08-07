@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:896144153617:android:336b96546beaad4c1ce5b0",
+        "mobilesdk_app_id": "1:896144153617:android:06ce0b177ad835f91ce5b0",
         "android_client_info": {
-          "package_name": "com.example.transfer_2024"
+          "package_name": "com.waldirdev01.transfer_2024"
         }
       },
       "oauth_client": [],

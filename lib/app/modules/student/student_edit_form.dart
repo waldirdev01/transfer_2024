@@ -4,6 +4,7 @@ import 'package:transfer_2024/app/models/app_user.dart';
 import 'package:transfer_2024/app/models/student.dart';
 import 'package:transfer_2024/app/providers/app_auth_provider.dart';
 import 'package:validatorless/validatorless.dart';
+
 import '../../core/ui/ap_ui_config.dart';
 import '../../core/widgets/app_field.dart';
 import '../../models/pne.dart';
@@ -74,13 +75,15 @@ class _StudentEditFormState extends State<StudentEditForm> {
                 onSaved: (value) => student.ieducar = value!,
               ),
               const SizedBox(height: 10),
-              AppField(
-                initialValue: student.cpf,
-                keyBoadType: TextInputType.number,
-                label: 'CPF',
-                validator: Validatorless.cpf('CPF inválido'),
-                onSaved: (value) => student.cpf = value!,
-              ),
+              appUser?.type == UserType.monitor
+                  ? const SizedBox.shrink()
+                  : AppField(
+                      initialValue: student.cpf,
+                      keyBoadType: TextInputType.number,
+                      label: 'CPF',
+                      validator: Validatorless.cpf('CPF inválido'),
+                      onSaved: (value) => student.cpf = value!,
+                    ),
               const SizedBox(height: 10),
               AppField(
                   initialValue: student.classroomGrade,

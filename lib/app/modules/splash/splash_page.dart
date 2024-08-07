@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:transfer_2024/app/core/constants/constants.dart';
 import 'package:transfer_2024/app/core/widgets/custom_app_bar.dart';
@@ -42,11 +43,12 @@ class _SplashPageState extends State<SplashPage> {
         title: 'Carregando...',
       ),
       body: Container(
-        margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
+        margin: const EdgeInsets.only(top: 20, left: 20, right: 40),
+        padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/images/bus.jpg'),
+            Image.asset('assets/images/bus.png'),
             const SizedBox(height: 20),
             const Text(
               'TRANSPORTE ESCOLAR',

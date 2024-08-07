@@ -4,6 +4,7 @@ import 'package:transfer_2024/app/core/constants/constants.dart';
 import 'package:transfer_2024/app/models/app_user.dart';
 import 'package:transfer_2024/app/modules/school/school_data.dart';
 import 'package:transfer_2024/app/providers/app_auth_provider.dart';
+
 import '../../core/ui/ap_ui_config.dart';
 import '../../core/widgets/app_logo.dart';
 import '../../core/widgets/custom_app_bar.dart';
@@ -34,7 +35,7 @@ class SchoolDetailsPage extends StatelessWidget {
                     'Menu',
                     style: TextStyle(color: Colors.white, fontSize: 24),
                   ),
-                  Icon(Icons.menu, color: Colors.white, size: 100),
+                  Icon(Icons.menu, color: Colors.white, size: 80),
                 ],
               ),
             ),

@@ -19,6 +19,7 @@ class _StudentCardState extends State<StudentCard> {
     School? school;
     await context.read<SchoolProvider>().getSchool(schooId);
     if (mounted) {
+      // ignore: use_build_context_synchronously
       school = context.read<SchoolProvider>().school;
     }
     if (school != null) {
@@ -68,6 +69,8 @@ class _StudentCardState extends State<StudentCard> {
                       },
                     ),
                     Text('I-EDUCAR: ${widget.student.ieducar}',
+                        style: const TextStyle(fontSize: 18)),
+                    Text('Faltas: ${widget.student.countAbsences()}',
                         style: const TextStyle(fontSize: 18)),
                   ]),
             ),

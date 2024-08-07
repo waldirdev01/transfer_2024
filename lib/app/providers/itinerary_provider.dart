@@ -62,6 +62,15 @@ class ItineraryProvider with ChangeNotifier {
     }
   }
 
+  Future<void> updateItineraryContract() async {
+    for (var iti in itineraries) {
+      await _firebaseFirestore
+          .collection('itineraries')
+          .doc(iti.id)
+          .update({'contract': '12/2024'});
+    }
+  }
+
   Future<void> updateItinerary(Itinerary itinerary) async {
     try {
       await _firebaseFirestore

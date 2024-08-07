@@ -76,6 +76,7 @@ class StudentProvider extends ChangeNotifier {
         .collection('students')
         .where('cpf', isEqualTo: '')
         .get();
+    // ignore: avoid_function_literals_in_foreach_calls
     snappshot.docs.forEach((doc) async {
       await _firebaseFirestore
           .collection('students')
@@ -365,6 +366,8 @@ class StudentProvider extends ChangeNotifier {
           studants.add(student);
         }
       }).toList();
+      _students.sort((a, b) => a.name.compareTo(b.name));
+      notifyListeners();
 
       return studants;
     } on FirebaseException catch (e) {

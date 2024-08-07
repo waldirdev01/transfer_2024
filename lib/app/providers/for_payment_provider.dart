@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:transfer_2024/app/models/for_payment.dart';
-
 import '../models/extracurricular_activity.dart';
 import '../models/itinerary.dart';
 import '../models/school.dart';

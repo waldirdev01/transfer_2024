@@ -19,17 +19,17 @@ class AppUiConfig {
   static ElevatedButtonThemeData buttonThemCustom() {
     return ElevatedButtonThemeData(
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(
+        backgroundColor: WidgetStateProperty.all<Color>(
           const Color.fromARGB(255, 95, 113, 214),
         ),
-        textStyle: MaterialStateProperty.all<TextStyle>(
+        textStyle: WidgetStateProperty.all<TextStyle>(
           const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.bold,
             color: Color.fromARGB(255, 241, 242, 240),
           ),
         ),
-        shape: MaterialStateProperty.all<OutlinedBorder>(
+        shape: WidgetStateProperty.all<OutlinedBorder>(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -40,9 +40,9 @@ class AppUiConfig {
 
   static ButtonStyle? get elevatedButtonThemeCustom => ButtonStyle(
         backgroundColor:
-            MaterialStateProperty.all<Color>(themeCustom.primaryColor),
-        textStyle: MaterialStateProperty.all<TextStyle>(buttonText),
-        shape: MaterialStateProperty.all<OutlinedBorder>(
+            WidgetStateProperty.all<Color>(themeCustom.primaryColor),
+        textStyle: WidgetStateProperty.all<TextStyle>(buttonText),
+        shape: WidgetStateProperty.all<OutlinedBorder>(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -50,7 +50,7 @@ class AppUiConfig {
       );
 
   static TextStyle get buttonText => const TextStyle(
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: FontWeight.bold,
         color: Colors.white,
       );

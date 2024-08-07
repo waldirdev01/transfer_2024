@@ -8,7 +8,7 @@ class AppLogo extends StatelessWidget {
     return Column(
       children: [
         Image.asset(
-          'assets/images/bus.jpg',
+          'assets/images/bus.png',
           height: 100,
         ),
         const SizedBox(height: 10),

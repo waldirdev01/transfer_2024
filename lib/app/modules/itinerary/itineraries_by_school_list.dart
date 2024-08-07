@@ -43,8 +43,11 @@ class ItinerariesBySchoolList extends StatelessWidget {
                     itemCount: itineraries.length,
                     itemBuilder: (context, index) {
                       final itinerary = itineraries[index];
-                      return ItineraryCardList(
-                          itinerary: itinerary, school: school);
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: ItineraryCardList(
+                            itinerary: itinerary, school: school),
+                      );
                     },
                   );
                 }

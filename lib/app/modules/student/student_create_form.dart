@@ -1,11 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
-import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:transfer_2024/app/core/ui/ap_ui_config.dart';
 import 'package:transfer_2024/app/providers/student_provider.dart';
 import 'package:validatorless/validatorless.dart';
+
 import '../../core/widgets/app_field.dart';
 import '../../models/pne.dart';
 import '../../models/school.dart';

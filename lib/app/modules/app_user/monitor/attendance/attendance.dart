@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:transfer_2024/app/core/constants/constants.dart';
 import 'package:transfer_2024/app/core/ui/ap_ui_config.dart';
+import 'package:transfer_2024/app/modules/app_user/monitor/attendance/attendance_edit_page.dart';
 import 'package:transfer_2024/app/modules/home_page.dart';
 import 'package:transfer_2024/app/modules/app_user/monitor/attendance/reposition_page.dart';
 import 'package:transfer_2024/app/providers/app_auth_provider.dart';
@@ -65,6 +66,14 @@ class _AttendancePageState extends State<AttendancePage> {
       MaterialPageRoute(
           builder: (context) =>
               RepositionPage(itinerary: itinerary, students: students)),
+    );
+  }
+
+  navigatorEditScreen(Itinerary itinerary, List<Student> students) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+          builder: (context) =>
+              AttendanceEditPage(itinerary: itinerary, students: students)),
     );
   }
 
@@ -342,13 +351,23 @@ class _AttendancePageState extends State<AttendancePage> {
                     const Divider(),
                     _appUser?.type != UserType.monitor
                         ? const SizedBox.shrink()
-                        : ElevatedButton(
-                            style: AppUiConfig.elevatedButtonThemeCustom,
-                            onPressed: () => navigatorRepositionScreen(
-                                widget.itinerary, widget.students),
-                            child: const Text('Ir para reposição',
-                                style: TextStyle(color: Colors.white)),
-                          ),
+                        : Column(children: [
+                      ElevatedButton(
+                        style: AppUiConfig.elevatedButtonThemeCustom,
+                        onPressed: () => navigatorRepositionScreen(
+                            widget.itinerary, widget.students),
+                        child: const Text('Ir para reposição',
+                            style: TextStyle(color: Colors.white)),
+                      ),
+
+                      ElevatedButton(
+                        style: AppUiConfig.elevatedButtonThemeCustom,
+                        onPressed: () => navigatorEditScreen(
+                            widget.itinerary, widget.students),
+                        child: const Text('Editar chamada',
+                            style: TextStyle(color: Colors.white)),
+                      ),
+                    ],)
                   ],
                 )
               ],

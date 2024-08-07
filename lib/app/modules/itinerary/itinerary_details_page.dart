@@ -28,6 +28,7 @@ class ItineraryDetaislPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final studentProvider = context.read<StudentProvider>();
+
     int vacances = 0;
     List<Student> studentsSelecteds = [];
     final userType = context.read<AppAuthProvider>().appUser!.type;
@@ -76,7 +77,9 @@ class ItineraryDetaislPage extends StatelessWidget {
                       },
                     )
                   ]
-                : school == null && userType == UserType.admin
+                : school == null &&
+                        (userType == UserType.admin ||
+                            userType == UserType.coordinator)
                     ? [
                         PopupMenuButton(
                           itemBuilder: ((context) => [
@@ -143,30 +146,65 @@ class ItineraryDetaislPage extends StatelessWidget {
                               },
                             )
                           ]
-                        : [
-                            PopupMenuButton(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              itemBuilder: ((context) => [
-                                    const PopupMenuItem(
-                                        value: 'imprimir_frequencia',
-                                        child: Text(
-                                            'Ir para lista de frequência')),
-                                  ]),
-                              onSelected: (value) {
-                                switch (value) {
-                                  case 'imprimir_frequencia':
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                AttendancePage(
-                                                    students: studentsSelecteds,
-                                                    itinerary: itinerary)));
-                                    break;
-                                }
-                              },
-                            )
-                          ]),
+                        : userType == UserType.coordinator
+                            ? [
+                                PopupMenuButton(
+                                  itemBuilder: ((context) => [
+                                        const PopupMenuItem(
+                                            value: 'manager_monitor',
+                                            child: Text('Gerenciar monitora')),
+                                        const PopupMenuItem(
+                                            value: 'frequencia',
+                                            child: Text(
+                                                'Ir para lista de frequência')),
+                                      ]),
+                                  onSelected: (value) {
+                                    switch (value) {
+                                      case 'frequencia':
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AttendancePage(
+                                                        students:
+                                                            studentsSelecteds,
+                                                        itinerary: itinerary)));
+                                        break;
+                                      case 'manager_monitor':
+                                        Navigator.of(context).pushNamed(
+                                            Constants
+                                                .kUSERMONITORASFORITINERARYLISTROUTE,
+                                            arguments: itinerary);
+                                        break;
+                                    }
+                                  },
+                                )
+                              ]
+                            : [
+                                PopupMenuButton(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                  itemBuilder: ((context) => [
+                                        const PopupMenuItem(
+                                            value: 'imprimir_frequencia',
+                                            child: Text(
+                                                'Ir para lista de frequência')),
+                                      ]),
+                                  onSelected: (value) {
+                                    switch (value) {
+                                      case 'imprimir_frequencia':
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AttendancePage(
+                                                        students:
+                                                            studentsSelecteds,
+                                                        itinerary: itinerary)));
+                                        break;
+                                      case 'faltosos':
+                                    }
+                                  },
+                                )
+                              ]),
         body: SingleChildScrollView(
           child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -239,6 +277,7 @@ class ItineraryDetaislPage extends StatelessWidget {
                         appUserProvider.getMonitora(itinerary.appUserId);
 
                         var monitora = appUserProvider.typeUser;
+
                         if (monitora == null) {
                           return const Text(
                             'Monitora: Não cadastrada',
@@ -263,7 +302,11 @@ class ItineraryDetaislPage extends StatelessWidget {
                         child: ListView.builder(
                           itemCount: studentsSelecteds.length,
                           itemBuilder: (context, index) {
+                            studentsSelecteds.sort((a, b) => a.name
+                                .toLowerCase()
+                                .compareTo(b.name.toLowerCase()));
                             final student = studentsSelecteds[index];
+
                             return InkWell(
                               onTap: () => Navigator.of(context).push(
                                   MaterialPageRoute(

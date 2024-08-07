@@ -47,6 +47,7 @@ class _SelectUserProfilePageState extends State<SelectUserProfilePage> {
             break;
           case UserType.admin:
             Navigator.of(context).pushReplacementNamed(Constants.kHOMEROUTE);
+         //Navigator.of(context).push(MaterialPageRoute(builder: (context)=> CadastroDireto()));
             break;
           case UserType.schoolMember:
             Navigator.of(context)
@@ -79,7 +80,7 @@ class _SelectUserProfilePageState extends State<SelectUserProfilePage> {
           Container(
             margin: const EdgeInsets.only(top: 20),
             height: 200,
-            child: Image.asset('assets/images/bus.jpg'),
+            child: Image.asset('assets/images/bus.png'),
           ),
           Positioned(
               top: 100,

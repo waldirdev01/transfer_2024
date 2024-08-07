@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:transfer_2024/app/core/ui/ap_ui_config.dart';
 import 'package:validatorless/validatorless.dart';
+
 import '../../core/ui/messages.dart';
 import '../../core/widgets/app_field.dart';
 import '../../models/itinerary.dart';
@@ -19,7 +20,7 @@ class ItineraryCreateForm extends StatefulWidget {
 }
 
 class _ItineraryCreateFormState extends State<ItineraryCreateForm> {
-  String _contract = '20/2022';
+  String _contract = '12/2024';
   final _formKey = GlobalKey<FormState>();
   final _code = TextEditingController();
   final _vehiclePlate = TextEditingController();
@@ -129,6 +130,7 @@ class _ItineraryCreateFormState extends State<ItineraryCreateForm> {
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(20)))),
                   items: const [
+                    DropdownMenuItem(value: '12/2024', child: Text('12/2024')),
                     DropdownMenuItem(value: '20/2022', child: Text('20/2022')),
                     DropdownMenuItem(value: '02/2023', child: Text('02/2023')),
                     DropdownMenuItem(value: '63/2021', child: Text('63/2021')),
